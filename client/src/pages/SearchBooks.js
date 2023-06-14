@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+
+import { useMutation } from '@apollo/client';
+import { SAVE_BOOK } from '../utils/mutations';
+
 import {
   Container,
   Col,
@@ -72,7 +76,11 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      const [saveBook, { error }] = useMutation(SAVE_BOOK, {
+        variables: { bookData: { ...bookToSave } },
+      });
+
+      console.log(saveBook, error);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
